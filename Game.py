@@ -21,7 +21,7 @@ class Game:
         print("Thanks for playing!")
 
     def take_bet(self):
-        print(f"You have ${self.money}")
+        print(f"\nYou have ${self.money}")
         self.bet = int(input("Enter your bet: "))
 
     def play_round(self):
@@ -30,14 +30,15 @@ class Game:
         self.inital_show()
 
         if self.player_hand.is_blackjack():
-            print("Blackjack!")
+            print("\nBlackjack!")
             self.money += self.bet * 1.5
             return
 
         result = self.player_turn()
 
         if result == "bust":
-            print("Stinky loser!")
+            print(f"Total value: {self.player_hand.calculate_value()}")
+            print("\nStinky loser!\n")
             self.money -= self.bet
             return
 
@@ -46,12 +47,12 @@ class Game:
         outcome = self.check_winner()
 
         if outcome == "win":
-            print("You won!")
+            print("\nYou won!")
             self.money += self.bet
         elif outcome == "lose":
-            print("You lost!")
+            print("\nYou lost!")
             self.money -= self.bet
-        else: print("Draw!")
+        else: print("\nDraw!")
 
     def reset_hands(self):
         self.player_hand.reset_hand()
@@ -68,25 +69,24 @@ class Game:
         self.dealer_hand.hit(self.deck.deal())
 
     def inital_show(self):
-        print(f"Your hand: {self.player_hand}")
-        print(f"Dealer hand: {self.dealer_hand}")
+        print(f"\nYour hand: {self.player_hand}")
+        print(f"Dealer hand: {self.dealer_hand.cards[0]}, ??")
 
     def player_turn(self):
         while True:
             print(f"Your hand value: {self.player_hand.calculate_value()}")
 
-            move = input("Hit (H) or Stand (S)? ").strip().lower()
+            move = input("\nHit (H) or Stand (S)? ").strip().lower()
             if move == "h":
-                print(f"You drew {self.player_hand.hit(self.deck.deal())}")
+                print(f"\nYou drew {self.player_hand.hit(self.deck.deal())}")
 
                 if self.player_hand.is_bust():
                     return "bust"
             else:
-                print("You stand")
                 return "stand"
 
     def dealer_turn(self):
-        print(f"Dealer hand: {self.dealer_hand}")
+        print(f"\nDealer hand: {self.dealer_hand}")
         print(f"Dealer value: {self.dealer_hand.calculate_value()}")
 
         while self.dealer_hand.calculate_value() < 17:

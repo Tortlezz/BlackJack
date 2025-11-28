@@ -20,7 +20,7 @@ class Hand:
         return self.calculate_value() == 21
 
     def is_bust(self):
-        return self.calculate_value() < 21 #calculated after each action
+        return self.calculate_value() > 21 #calculated after each action
 
     def hit(self, card): #needs to call deal()
         self.cards.append(card)
@@ -30,4 +30,8 @@ class Hand:
         self.cards = []
 
     def __str__(self):
-        return f"{self.cards}"
+        str_cards = ""
+        for card in self.cards:
+            str_cards += card.__str__() + ", "
+
+        return str_cards[:-2]
