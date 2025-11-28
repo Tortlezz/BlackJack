@@ -1,9 +1,8 @@
 class Hand:
-    def __init__(self, bet):
+    def __init__(self):
         self.cards = []
-        self.bet = bet
 
-    def calculate_value(self): #will call after every action
+    def calculate_value(self):
         sum = 0
         aces = 0
         for card in self.cards:
@@ -25,3 +24,10 @@ class Hand:
 
     def hit(self, card): #needs to call deal()
         self.cards.append(card)
+        return card
+
+    def reset_hand(self):
+        self.cards = []
+
+    def __str__(self):
+        return f"{self.cards}"
