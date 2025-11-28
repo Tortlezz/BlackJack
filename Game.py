@@ -21,8 +21,8 @@ class Game:
         print("Thanks for playing!")
 
     def take_bet(self):
-        print(f"\nYou have ${self.money}")
-        self.bet = int(input("Enter your bet: "))
+        print(f"\nYou have ${self.money:.2f}")
+        self.bet = float(input("Enter your bet: "))
 
     def play_round(self):
         self.reset_hands()
@@ -30,7 +30,7 @@ class Game:
         self.inital_show()
 
         if self.player_hand.is_blackjack():
-            print("\nBlackjack!")
+            print(f"\nBlackjack! +${self.bet * 1.5:.2f}")
             self.money += self.bet * 1.5
             return
 
@@ -43,16 +43,8 @@ class Game:
             return
 
         self.dealer_turn()
-
         outcome = self.check_winner()
-
-        if outcome == "win":
-            print("\nYou won!")
-            self.money += self.bet
-        elif outcome == "lose":
-            print("\nYou lost!")
-            self.money -= self.bet
-        else: print("\nDraw!")
+        self.distribute_money(outcome)
 
     def reset_hands(self):
         self.player_hand.reset_hand()
@@ -80,10 +72,13 @@ class Game:
             if move == "h":
                 print(f"\nYou drew {self.player_hand.hit(self.deck.deal())}")
 
+                if self.player_hand.is_blackjack():
+                    return ""
+
                 if self.player_hand.is_bust():
                     return "bust"
             else:
-                return "stand"
+                return ""
 
     def dealer_turn(self):
         print(f"\nDealer hand: {self.dealer_hand}")
@@ -105,3 +100,12 @@ class Game:
         elif dealer_value > player_value:
             return "lose"
         else: return "win"
+
+    def distribute_money(self, outcome):
+        if outcome == "win":
+            print(f"\nYou won! +${self.bet}")
+            self.money += self.bet
+        elif outcome == "lose":
+            print(f"\nYou lost! -${self.bet}")
+            self.money -= self.bet
+        else: print("\nPush!")

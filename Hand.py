@@ -16,11 +16,11 @@ class Hand:
 
         return sum
 
-    def is_blackjack(self): # calculated at the beginning of the round ONLY
+    def is_blackjack(self):
         return self.calculate_value() == 21
 
     def is_bust(self):
-        return self.calculate_value() > 21 #calculated after each action
+        return self.calculate_value() > 21
 
     def hit(self, card): #needs to call deal()
         self.cards.append(card)
