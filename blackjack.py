@@ -1,4 +1,4 @@
-k.import Card
+import Card
 import Deck
 import Hand
 
