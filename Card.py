@@ -3,9 +3,9 @@ class Card:
         self.suit = suit
         self.rank = rank
 
-        if rank in ["K", "Q", "J"]:
+        if rank in ["J", "Q", "K"]:
             self.value = 10
-        if rank == "A":
+        elif rank == "A":
             self.value = 11
         else: self.value = int(rank)
 
