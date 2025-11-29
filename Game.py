@@ -3,6 +3,18 @@ from Hand import Hand
 import pygame
 
 class Game:
+    """
+    Represents a game of Blackjack, managing the deck, player and dealer hands,
+    bets, money, and game flow (turns and round outcomes).
+
+    Attributes:
+        num_decks (int): Number of decks used in the game.
+        deck (Deck): The deck object used to deal cards.
+        money (float): The player’s current money balance.
+        bet (float): Current bet amount.
+        player_hand (Hand): The player’s current hand.
+        dealer_hand (Hand): The dealer’s current hand.
+        """
     def __init__(self, num_decks=1, starting_cash=1000):
         self.num_decks = num_decks
         self.deck = Deck(num_decks)
@@ -19,6 +31,12 @@ class Game:
         self.dealer_shows = False
 
     def start(self, bet):
+        """
+        Starts a new round with a given bet.
+        Resets hands, checks the deck for reshuffling, and deals initial cards.
+        Also checks for natural Blackjack on the player's hand.
+        Args: bet (int): The amount the player wants to wager for this round.
+        """
         self.bet = bet
         #setting events
         self.round_over = False
@@ -42,12 +60,20 @@ class Game:
             self.dealer_turn = True
 
     def check_deck(self):
+        """
+        Reshuffle the deck if penetration reaches threshold.
+        Prints a message when reshuffling occurs.
+        """
         deck_penetration = 0.8
         if len(self.deck.cards) < int((1 - deck_penetration) * 52 * self.num_decks):
             self.deck.reshuffle()
             print("Deck reshuffled!")
 
     def player_hit(self):
+        """
+        Player takes a hit: add a card to their hand.
+        Automatically ends the player’s turn and starts dealer's turn if the player busts or hits 21.
+        """
         self.player_hand.hit(self.deck.deal())
 
         # End player turn if bust or 21
@@ -57,11 +83,19 @@ class Game:
             self.dealer_turn = True
 
     def player_stand(self):
+        """
+        Player chooses to stand.
+        Ends the player’s turn and starts the dealer’s turn.
+        """
         self.player_turn = False
         self.dealer_shows = True
         self.dealer_turn = True
 
     def dealer_play(self):
+        """
+        Dealer's turn logic: hits until reaching 17 or higher.
+        After finishing, ends the dealer's turn and marks the round as over.
+        """
         while self.dealer_hand.calculate_value() < 17:
             self.dealer_hand.hit(self.deck.deal())
             pygame.time.wait(500)
@@ -70,6 +104,10 @@ class Game:
         self.round_over = True
 
     def check_winner(self):
+        """
+        Determine the outcome of the round based on hand values.
+        Returns: str: "win" if player wins, "lose" if player loses, "push" if tied.
+        """
         player_value = self.player_hand.calculate_value()
         dealer_value = self.dealer_hand.calculate_value()
 
@@ -85,6 +123,10 @@ class Game:
             return "push"
 
     def resolve_round(self):
+        """
+        Resolve the round by updating player's money according to outcome.
+        Returns: str: Outcome of the round ("win", "lose", "push").
+        """
         outcome = self.check_winner()
 
         if outcome == "win":
@@ -93,8 +135,3 @@ class Game:
             self.money -= self.bet
         # Push does not change money
         return outcome
-
-
-
-
-
