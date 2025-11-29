@@ -10,12 +10,12 @@ class Deck:
         self.shuffle()
 
     def create_deck(self):
-        ranks = [str(i) for i in range(2, 11)] + ["J", "Q", "K", "A"]
-        suits = ["♠", "♥", "♦", "♣"]
+        self.ranks = [str(i) for i in range(2, 11)] + ["J", "Q", "K", "A"]
+        self.suits = ["♠", "♥", "♦", "♣"]
 
         for i in range(self.deck_num):
-            for suit in suits:
-                for rank in ranks:
+            for suit in self.suits:
+                for rank in self.ranks:
                     self.cards.append(Card.Card(suit, rank))
 
     def shuffle(self):
