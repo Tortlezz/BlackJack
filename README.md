@@ -1,10 +1,15 @@
 # BlackJack
 A simple blackjack game on python
 
-No visuals added yet.
+## **TODO**:
+- add split, double, insurance
+- gracefully handling invalid input.
+- other bj features that idk yet.
+- Exit on command w/o terminating
+- End of round visuals
 
-**TODO**:
-add split, double, insurance.
-gracefully handling invalid input.
-other bj features that idk yet.
+# How to Play:
+- Console is where you bet (after ever round)
+- Click hit or stand (more functions added later)
+
 
