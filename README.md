@@ -8,6 +8,7 @@ A simple blackjack game on python
 - Exit on command w/o terminating
 - Smoother betting (maybe out of console) and round changing
 - End of round visuals
+- Sound effects for every action
 
 ## How to Play:
 - Console is where you bet (after ever round)
