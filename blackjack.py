@@ -21,12 +21,19 @@ while running:
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             action = ui.get_button_click(pygame.mouse.get_pos())
+            if action == "EXIT":
+                running = False
 
             if game.player_turn:
                 if action == "Hit":
                     game.player_hit()
                 elif action == "Stand":
                     game.player_stand()
+                elif action == "Double Down":
+                    game.player_double_down()
+                elif action == "Insurance":
+                    game.player_insurance()
+
 
     #dealer turn
     if game.dealer_turn:
@@ -37,7 +44,7 @@ while running:
 
     if game.round_over:
         outcome = game.resolve_round()
-        print(f"Round over! Outcome: {outcome}, Money: ${game.money:.2f}")
+        print(f"Round over! Outcome: {outcome} \nMoney: ${game.money:.2f}")
         if game.money <= 0:
             print("You went bankrupt! Game over.")
             running = False

@@ -29,6 +29,8 @@ class Game:
         self.dealer_turn = False
         self.round_over = False
         self.dealer_shows = False
+        self.insurance = False
+        self.betting_screen = True
 
     def start(self, bet):
         """
@@ -91,6 +93,20 @@ class Game:
         self.dealer_shows = True
         self.dealer_turn = True
 
+    def player_double_down(self):
+        if self.bet <= 0.5 * self.money:
+            self.bet = 2 *  self.bet
+            self.player_hand.hit(self.deck.deal())
+
+            # End player turn if bust or 21
+            if self.player_hand.is_bust() or self.player_hand.calculate_value() == 21:
+                self.player_turn = False
+                self.dealer_shows = True
+                self.dealer_turn = True
+
+    def player_insurance(self):
+        self.insurance = True
+
     def dealer_play(self):
         """
         Dealer's turn logic: hits until reaching 17 or higher.
@@ -111,16 +127,17 @@ class Game:
         player_value = self.player_hand.calculate_value()
         dealer_value = self.dealer_hand.calculate_value()
 
-        if player_value > 21:
-            return "lose"
-        elif dealer_value > 21:
-            return "win"
-        elif player_value > dealer_value:
-            return "win"
-        elif dealer_value > player_value:
-            return "lose"
-        else:
-            return "push"
+        insurance_result = False
+        if self.insurance:
+            if dealer_value == 21 and len(self.dealer_hand.cards) == 2:
+                return "insurance"
+            else: insurance_result = True
+
+        if player_value > 21: return "lose", insurance_result
+        elif dealer_value > 21: return "win", insurance_result
+        elif player_value > dealer_value: return "win", insurance_result
+        elif dealer_value > player_value: return "lose", insurance_result
+        else: return "push", insurance_result
 
     def resolve_round(self):
         """
@@ -129,9 +146,16 @@ class Game:
         """
         outcome = self.check_winner()
 
-        if outcome == "win":
-            self.money += self.bet
-        elif outcome == "lose":
-            self.money -= self.bet
-        # Push does not change money
-        return outcome
+        if outcome[1] == False:
+            if outcome[0] == "push": self.money += 0
+            elif outcome[0] == "win": self.money += self.bet
+            elif outcome[0] == "lose": self.money -= self.bet
+
+            return outcome[0]
+
+        if outcome[0] == "push": self.money -= self.bet
+        elif outcome[0] == "win": self.money += 0
+        elif outcome[0] == "lose": self.money -= 2 * self.bet
+
+        return f"Insurance side-bet lost. Main hand: {outcome[0]}"
+
