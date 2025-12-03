@@ -2,11 +2,10 @@
 A simple blackjack game on python
 
 ## **TODO**:
-- add split, double, insurance
+- ~~add split, double, insurance~~
 - gracefully handling invalid input.
-- other bj features that idk yet.
-- Exit on command w/o terminating
-- Smoother betting (maybe out of console) and round changing
+- ~~Exit on command w/o terminating~~
+- Smoother betting (maybe out of console) and round changing (in progess)
 - End of round visuals
 - Sound effects for every action
 
