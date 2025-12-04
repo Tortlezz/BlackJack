@@ -5,8 +5,8 @@ A simple blackjack game on python
 - ~~add split, double, insurance~~
 - gracefully handling invalid input.
 - ~~Exit on command w/o terminating~~
-- Smoother betting (maybe out of console) and round changing (in progess)
-- End of round visuals
+- ~~Smoother betting (maybe out of console) and round changing (in progess)~~
+- ~~End of round visuals~~
 - Sound effects for every action
 
 ## How to Play:
