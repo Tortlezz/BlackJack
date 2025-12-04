@@ -45,6 +45,7 @@ class Game:
         self.player_turn = True
         self.dealer_turn = False
         self.dealer_shows = False
+        self.insurance = False
         #reset hands
         self.player_hand.reset_hand()
         self.dealer_hand.reset_hand()
@@ -69,7 +70,7 @@ class Game:
         deck_penetration = 0.8
         if len(self.deck.cards) < int((1 - deck_penetration) * 52 * self.num_decks):
             self.deck.reshuffle()
-            print("Deck reshuffled!")
+            print("\nDeck reshuffled!")
 
     def player_hit(self):
         """
@@ -127,17 +128,20 @@ class Game:
         player_value = self.player_hand.calculate_value()
         dealer_value = self.dealer_hand.calculate_value()
 
-        insurance_result = False
+        self.insurance_result = False
         if self.insurance:
             if dealer_value == 21 and len(self.dealer_hand.cards) == 2:
                 return "insurance"
-            else: insurance_result = True
+            else: self.insurance_result = True
 
-        if player_value > 21: return "lose", insurance_result
-        elif dealer_value > 21: return "win", insurance_result
-        elif player_value > dealer_value: return "win", insurance_result
-        elif dealer_value > player_value: return "lose", insurance_result
-        else: return "push", insurance_result
+        if len(self.player_hand.cards) == 2 and self.player_hand.is_blackjack():
+            return "blackjack", self.insurance_result
+
+        if player_value > 21: return "lose", self.insurance_result
+        elif dealer_value > 21: return "win", self.insurance_result
+        elif player_value > dealer_value: return "win", self.insurance_result
+        elif dealer_value > player_value: return "lose", self.insurance_result
+        else: return "push", self.insurance_result
 
     def resolve_round(self):
         """
@@ -150,6 +154,7 @@ class Game:
             if outcome[0] == "push": self.money += 0
             elif outcome[0] == "win": self.money += self.bet
             elif outcome[0] == "lose": self.money -= self.bet
+            elif outcome[0] == "blackjack": self.money += 1.5 * self.bet
 
             return outcome[0]
 
@@ -157,5 +162,6 @@ class Game:
         elif outcome[0] == "win": self.money += 0
         elif outcome[0] == "lose": self.money -= 2 * self.bet
 
-        return f"Insurance side-bet lost. Main hand: {outcome[0]}"
+        print(f"Insurance side-bet lost. Main hand: {outcome[0]}")
+        return outcome[0]
 

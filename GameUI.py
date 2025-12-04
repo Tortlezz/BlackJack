@@ -49,13 +49,14 @@ class GameUI:
         Redraws the entire game screen, including player and dealer cards and buttons.
         Should be called each action to update visuals.
         """
-        self.create_buttons()
         color = (0, 120, 0)
         self.screen.fill(color)
+        self.create_buttons()
         self.draw_player_cards()
         self.draw_dealer_cards()
         self.draw_buttons()
         self.draw_game_info()
+
         pygame.display.flip()
 
     def draw_player_cards(self):
@@ -138,9 +139,6 @@ class GameUI:
             if rect.collidepoint(mouse_pos):
                 return name
 
-        if self.exit_button.collidepoint(mouse_pos):
-            return "EXIT"
-
         return None
 
     def draw_game_info(self):
@@ -162,3 +160,86 @@ class GameUI:
         self.screen.blit(player_card_value, (self.player_card_pos_x + 90, 540))
         if self.game.dealer_shows:
             self.screen.blit(dealer_card_value, (self.dealer_card_pos_x + 90, 110))
+
+    def draw_results_screen(self, outcome, bet_amt):
+        self.screen.fill((0, 120, 0))
+
+        title_font = pygame.font.SysFont("arial", 48)
+        small_font = self.button_font
+        white = (255, 255, 255)
+        red = (200, 50, 50)
+        green = (50, 200, 50)
+        gray = (200, 200, 200)
+
+        title_surf = title_font.render("Round Results", True, white)
+        title_rect = title_surf.get_rect(center=(640, 100))
+        self.screen.blit(title_surf, title_rect)
+
+        outcome_text = f"Outcome: {outcome}"
+        outcome_surf = small_font.render(outcome_text, True, white)
+        outcome_rect = outcome_surf.get_rect(center=(640, 200))
+        self.screen.blit(outcome_surf, outcome_rect)
+
+        if not self.game.insurance:
+            if outcome == "win":
+                delta_text = f"You won ${self.game.bet:.2f}"
+                delta_color = green
+            elif outcome == "blackjack":
+                delta_text = f"BLACKJACK!!!! ${1.5 * self.game.bet:.2f}"
+                delta_color = green
+            elif outcome == "lose":
+                delta_text = f"You lost ${-self.game.bet:.2f}"
+                delta_color = red
+            else:
+                delta_text = "You broke even"
+                delta_color = white
+        else:
+            if self.game.insurance_result:
+                if outcome == "lose":
+                    delta_text = f"You lost but Insurance paid out!"
+                    delta_color = white
+                else:
+                    delta_text = f"You tied but Insurance paid out! {self.game.bet:.2f}"
+                    delta_color = green
+            else:
+                if outcome == "win":
+                    delta_text = "You win but Insurance lost!"
+                    delta_color = white
+                elif outcome == "lose":
+                    delta_text = f"You lost and Insurance lost! ${-2 * self.game.bet:.2f}"
+                    delta_color = red
+                else:
+                    delta_text = f"You tied but Insurance paid out! ${-self.game.bet:.2f}"
+                    delta_color = red
+
+
+        delta_surf = small_font.render(delta_text, True, delta_color)
+        delta_rect = delta_surf.get_rect(center=(640, 250))
+        self.screen.blit(delta_surf, delta_rect)
+
+        money_text = f"Current Money: ${self.game.money:.2f}"
+        money_surf = small_font.render(money_text, True, white)
+        money_rect = money_surf.get_rect(center=(640, 300))
+        self.screen.blit(money_surf, money_rect)
+
+        # Exit button (results screen only)
+        exit_rect = pygame.Rect(540, 500, 200, 50)
+        pygame.draw.rect(self.screen, gray, exit_rect)
+        pygame.draw.rect(self.screen, (0, 0, 0), exit_rect, 3)
+        exit_surf = small_font.render("EXIT", True, (0, 0, 0))
+        exit_text_rect = exit_surf.get_rect(center=exit_rect.center)
+        self.screen.blit(exit_surf, exit_text_rect)
+
+        prompt_surf = small_font.render("Enter bet for next round and press Enter:", True, white)
+        prompt_rect = prompt_surf.get_rect(center=(640, 370))
+        self.screen.blit(prompt_surf, prompt_rect)
+
+        input_rect = pygame.Rect(440, 400, 400, 50)
+        pygame.draw.rect(self.screen, white, input_rect, 2)
+        bet_surf = small_font.render(bet_amt, True, white)
+        bet_rect = bet_surf.get_rect(midleft=(input_rect.x + 10, input_rect.centery))
+        self.screen.blit(bet_surf, bet_rect)
+
+        self.results_exit_rect = exit_rect
+
+        pygame.display.flip()
