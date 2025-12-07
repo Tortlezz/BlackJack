@@ -16,8 +16,16 @@ results_mode = False
 bet_input_text = ""
 results_delay_start = None
 
-bet = float(input(f"\nYou have ${game.money:.2f}. Enter your bet: "))
+while True:
+    try:
+        bet = float(input(f"\nYou have ${game.money:.2f}. Enter your bet: "))
+        if bet > game.money:
+            print("You are too poor, try again")
+        else: break
+    except:
+        print("Invalid Input, try again")
 game.start(bet)
+
 while running:
     #player turn
     for event in pygame.event.get():
