@@ -3,14 +3,15 @@ A simple blackjack game on python
 
 ## **TODO**:
 - ~~add split, double, insurance~~
-- gracefully handling invalid input.
-- ~~Exit on command w/o terminating~~
+- - ~~Exit on command w/o terminating~~
 - ~~Smoother betting (maybe out of console) and round changing (in progess)~~
 - ~~End of round visuals~~
-- Sound effects for every action
+- ~~Sound effects for every action~~ (gave up)
 
 ## How to Play:
-- Console is where you bet (after ever round)
-- Click hit or stand (more functions added later)
+- Input # decks, initial money, and initial bet in console
+- All subsequent bets are on screen
+- Click hit or stand or double down (or insurance if possible)
+- Win free money!
 
 
