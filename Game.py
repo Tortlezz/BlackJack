@@ -126,9 +126,10 @@ class Game:
         Dealer's turn logic: hits until reaching 17 or higher.
         After finishing, ends the dealer's turn and marks the round as over.
         """
-        while self.dealer_hand.calculate_value() < 17:
-            self.dealer_hand.hit(self.deck.deal())
-            pygame.time.wait(500)
+        if not (self.player_hand.is_bust() or self.player_hand.calculate_value() == 21):
+            while self.dealer_hand.calculate_value() < 17:
+                self.dealer_hand.hit(self.deck.deal())
+                pygame.time.wait(500)
 
         self.dealer_turn = False
         self.round_over = True

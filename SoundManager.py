@@ -9,7 +9,7 @@ class SoundManager():
         self.sounds = {
             'hit': 'sounds/Card_Hit_Effect.mp3',
             'shuffle': 'sounds/shuffling-cards-74757.mp3',
-            'chips': 'sounds/pokerchipsdropping-27240.mp3',
+            'chips': 'sounds/chips.mp3',
             'turn': 'sounds/Turn_Card_Noise.mp3',
             'intro': 'sounds/jazzy-cut-to-commercial-tv-theme-albert-marlowe-production-music-all-rights-reserved.mp3'
         }
