@@ -3,8 +3,22 @@ from Game import Game
 from GameUI import GameUI
 from SoundManager import SoundManager
 
-decks = int(input("How many decks? "))
-cash = float(input("How much starting cash? "))
+while True:
+    try:
+        decks = int(input("How many decks? "))
+        if decks >= 1:
+            break
+        else: print("Enter a valid number")
+    except:
+        print("Please enter a number.")
+while True:
+    try:
+        cash = float(input("How much starting cash? "))
+        if cash > 0:
+            break
+        else: print("Enter a valid number")
+    except: print("Please enter a number.")
+
 #initializing objects
 pygame.init()
 sound_manager = SoundManager()
