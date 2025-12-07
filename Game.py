@@ -1,5 +1,6 @@
 from Deck import Deck
 from Hand import Hand
+from SoundManager import SoundManager
 import pygame
 
 class Game:
@@ -24,6 +25,9 @@ class Game:
         self.player_hand = Hand()
         self.dealer_hand = Hand()
 
+        #sound
+        self.sound_manager = SoundManager()
+
         #event states
         self.player_turn = True
         self.dealer_turn = False
@@ -40,6 +44,8 @@ class Game:
         Args: bet (int): The amount the player wants to wager for this round.
         """
         self.bet = bet
+
+        self.sound_manager.play_chips_sound()
         #setting events
         self.round_over = False
         self.player_turn = True
@@ -60,6 +66,7 @@ class Game:
         if self.player_hand.is_blackjack():
             self.player_turn = False
             self.dealer_shows = True
+            self.sound_manager.play_turn_sound()
             self.dealer_turn = True
 
     def check_deck(self):
@@ -70,6 +77,7 @@ class Game:
         deck_penetration = 0.8
         if len(self.deck.cards) < int((1 - deck_penetration) * 52 * self.num_decks):
             self.deck.reshuffle()
+            self.sound_manager.play_shuffle_sound()
             print("\nDeck reshuffled!")
 
     def player_hit(self):
@@ -77,12 +85,14 @@ class Game:
         Player takes a hit: add a card to their hand.
         Automatically ends the player’s turn and starts dealer's turn if the player busts or hits 21.
         """
+        self.sound_manager.play_hit_sound()
         self.player_hand.hit(self.deck.deal())
 
         # End player turn if bust or 21
         if self.player_hand.is_bust() or self.player_hand.calculate_value() == 21:
             self.player_turn = False
             self.dealer_shows = True
+            self.sound_manager.play_turn_sound()
             self.dealer_turn = True
 
     def player_stand(self):
@@ -92,17 +102,20 @@ class Game:
         """
         self.player_turn = False
         self.dealer_shows = True
+        self.sound_manager.play_turn_sound()
         self.dealer_turn = True
 
     def player_double_down(self):
         if self.bet <= 0.5 * self.money:
             self.bet = 2 *  self.bet
+            self.sound_manager.play_hit_sound()
             self.player_hand.hit(self.deck.deal())
 
             # End player turn if bust or 21
             if self.player_hand.is_bust() or self.player_hand.calculate_value() == 21:
                 self.player_turn = False
                 self.dealer_shows = True
+                self.sound_manager.play_turn_sound()
                 self.dealer_turn = True
 
     def player_insurance(self):

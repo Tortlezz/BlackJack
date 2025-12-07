@@ -1,11 +1,14 @@
 import pygame
 from Game import Game
 from GameUI import GameUI
+from SoundManager import SoundManager
 
 decks = int(input("How many decks? "))
 cash = float(input("How much starting cash? "))
-
+#initializing objects
 pygame.init()
+sound_manager = SoundManager()
+sound_manager.play_intro_sound()
 game = Game(decks, cash)
 ui = GameUI(game)
 clock = pygame.time.Clock()
