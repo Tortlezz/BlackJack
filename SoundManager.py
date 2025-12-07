@@ -1,7 +1,9 @@
 import pygame
 
 class SoundManager():
-
+    """
+    Plays sound for every action
+    """
     def __init__(self):
         pygame.mixer.init()
         self.sounds = {
