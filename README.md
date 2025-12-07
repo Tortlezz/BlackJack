@@ -3,7 +3,7 @@ A simple blackjack game on python
 
 ## **TODO**:
 - ~~add split, double, insurance~~
-- - ~~Exit on command w/o terminating~~
+- ~~Exit on command w/o terminating~~
 - ~~Smoother betting (maybe out of console) and round changing (in progess)~~
 - ~~End of round visuals~~
 - ~~Sound effects for every action~~ (gave up)
